@@ -1,0 +1,14 @@
+FATTURA N. 58/2026
+Data emissione: 12/03/2026
+Data ordine: 01/03/2026 - Rif. ordine n. 40412
+
+Fornitore: Neri Cartotecnica S.r.l.
+P.IVA IT01234567890
+
+Carta A4 (risma)    10 x 3,90 = 39,00
+Toner nero           2 x 54,50 = 109,00
+
+Imponibile 148,00 EUR
+IVA 22% 32,56 EUR
+TOTALE 180,56 EUR
+Scadenza: 11/04/2026
