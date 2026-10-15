@@ -1,0 +1,15 @@
+FATTURA N. FT-0704
+Data emissione: 27/02/2026
+Data ordine: 14/02/2026 - Rif. ordine n. 30379
+
+Fornitore: TecnoUfficio Srl
+P.IVA IT08386379402
+
+Descrizione                    Q.ta Prezzo unit.      Importo
+Tastiera wireless                 2        34,90        69,80
+Cavo HDMI 2 m                     9         8,99        80,91
+
+Imponibile: 150,71 CHF
+IVA 0%: 0,00 CHF
+TOTALE DOCUMENTO: 150,71 CHF
+Scadenza pagamento: 29/03/2026

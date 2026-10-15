@@ -2,7 +2,7 @@
 import os
 import random
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from typing import TypeVar
 
 from dotenv import load_dotenv
@@ -48,4 +48,45 @@ def with_retry(fn: Callable[[], T], max_attempts: int = 4) -> T:
             print(f"[retry] errore {status}, tentativo {attempt}/{max_attempts}, attendo {delay:.1f}s")
             time.sleep(delay)
     raise RuntimeError("non raggiungibile")
+
+def stream_events(
+    client: genai.Client,
+    prompt: str,
+    system_instruction: str | None = None,
+    temperature: float=0.7,
+) -> Iterator[tuple[str, object]]:
+    """Genera tuple (tipo, contenuto).
+
+    ("text", "pezzo di testo")                  per ogni frammento di risposta
+    ("usage", {"input": n, "output": m})        una volta, a fine flusso
+    Un errore comunicato dentro il flusso solleva RuntimeError.
+    """
+    kwargs = {
+        "model": MODEL,
+        "input": prompt,
+        "generation_config": {"temperature": temperature},
+        "stream": True,
+        "store": False,
+    }
+    if system_instruction:
+        kwargs["system_instruction"] = system_instruction
+    
+    # il retry copre solo l'apertura del flusso: a meta' flusso non si ritenta
+    stream = with_retry(lambda: client.interactions.create(**kwargs))
+
+    for event in stream:
+        kind = event.event_type
+        if kind == "step.delta" and event.delta.type == "text":
+            text = getattr(event.delta, "text", None)
+            if text:
+                yield ("text", text)
+        elif kind == "interaction.completed":
+            usage = event.interaction.usage
+            yield ("usage", {
+                "input": usage.total_input_tokens if usage else None,
+                "output": usage.total_output_tokens if usage else None,
+            })
+        elif kind == "error":
+            message = event.error.message if event.error else "errore sconosciuto"
+            raise RuntimeError(message)
             
