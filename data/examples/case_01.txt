@@ -1,0 +1,13 @@
+Oggetto: Fattura 619/2026
+
+Gentile cliente,
+in allegato la fattura 619/2026 emessa il 22 giugno 2026 da Greco Informatica S.r.l..
+Il materiale e' stato ordinato il 6 giugno 2026 (ordine 85674).
+
+Dettaglio:
+- Scatola di cartone 40x30: 6 x 1,20 CHF = 7,20 CHF
+
+Importo netto 7,20 CHF, IVA (0%) 0,00 CHF, totale 7,20 CHF, da saldare entro il 21 agosto 2026.
+
+Cordiali saluti,
+Greco Informatica S.r.l.

@@ -1,0 +1,14 @@
+INVOICE
+Invoice no.: 43/E
+Issue date: 25 July 2026
+Payment due: on receipt
+Order date: 8 July 2026
+Seller: Barbieri Ricambi S.r.l.
+VAT no.: IT32871012269
+Items:
+  8 x Wireless keyboard @ 34.90 EUR -> 279.20
+  3 x Technical consulting (hour) @ 65.00 EUR -> 195.00
+  5 x Packing tape (pack) @ 6.50 EUR -> 32.50
+Subtotal: 506.70 EUR
+VAT 22%: 111.47 EUR
+Total due: 618.17 EUR

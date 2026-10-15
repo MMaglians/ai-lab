@@ -1,0 +1,9 @@
+Costa Stampa S.p.A. | IT19283276483
+INV FT-0954 | 2026-02-05
+----
+Toner nero ; 7 ; 54.50 ; 381.50
+Tastiera wireless ; 5 ; 34.90 ; 174.50
+Sedia ergonomica ; 8 ; 189.00 ; 1512.00
+----
+NETTO 2068.00  IVA 0.00 (0%)  TOT 2068.00 USD
+SCAD. 2026-02-20
