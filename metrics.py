@@ -62,3 +62,22 @@ def precision_recall_f1(tp: int, fp: int, fn: int) -> tuple[float, float, float]
 def standard_error(p: float, n: int) -> float:
     """Errore standard di una proporzione stimata su n casi."""
     return math.sqrt(p * (1 - p) / n) if n > 0 else float("nan")
+
+def wilson_interval(successes: int, n: int, z: float = 1.96) -> tuple[float, float]:
+    """Intervallo di Wilson (95% con z=1.96) per una proporzione. Funziona anche per p = 0 o 1."""
+    if n==0:
+        return float("nan"), float("nan")
+    p = successes / n
+    denom = 1 + z * z/n
+    center = (p + z * z / (2 * n)) / denom
+    half = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / denom
+    return max(0.0, center-half), min(1.0, center + half)
+
+def sign_test_pvalue(b: int, c: int) -> float:
+    """Test dei segni esatto (a due code) sulle coppie discordanti b e c, con p = 0.5 sotto H0."""
+    n = b+c
+    if n == 0:
+        return 1.0
+    k = min(b, c)
+    tail = sum(math.comb(n, i) for i in range(k+1)) / 2 ** n
+    return min(1.0, 2*tail)

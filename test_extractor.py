@@ -73,3 +73,18 @@ def test_transient_error_then_success(monkeypatch):
         return NS(output_text=json.dumps(GOOD), usage=usage())
 
     assert extract("testo", client=FakeClient(handler)).ok
+
+def test_strip_descriptions_keeps_field_named_description():
+    from extractor import strip_descriptions
+    from schemas import Invoice
+    schema = Invoice.model_json_schema()
+    stripped = strip_descriptions(schema)
+    assert "description" in stripped["$defs"]["LineItem"]["properties"]   # il CAMPO resta
+    assert '"description": "' not in json.dumps(stripped)                # le descrizioni testuali no
+
+
+def test_no_descriptions_sends_stripped_schema():
+    client = FakeClient(reply(GOOD))
+    extract("testo", client=client, schema_descriptions=False)
+    sent = client.interactions.calls[0]["response_format"]["schema"]
+    assert '"description": "' not in json.dumps(sent)

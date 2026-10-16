@@ -55,9 +55,25 @@ class Extraction:
     seconds: float = 0.0
 
 
-def extract(text: str, version: str = "v2", client=None, max_attempts: int = 4) -> Extraction:
+def strip_descriptions(node):
+    """Rimuove le descrizioni (stringhe) dallo schema JSON, in modo ricorsivo."""
+    if isinstance(node, dict):
+        return {
+            k: strip_descriptions(v)
+            for k, v in node.items()
+            if not (k== "description" and isinstance(v, str))
+        } #si tolgono solo descrizioni testuali
+    if isinstance(node, list):
+        return [strip_descriptions(x) for x in node]
+    return node
+
+def extract(text: str, version: str = "v2", client=None, max_attempts: int = 4, 
+            schema_descriptions: bool=True) -> Extraction:
     system, preamble = PROMPTS[version]
     client = client or get_client()
+    schema = Invoice.model_json_schema()
+    if not schema_descriptions:
+        schema = strip_descriptions(schema)
     start = time.perf_counter()
 
     try:
@@ -70,7 +86,7 @@ def extract(text: str, version: str = "v2", client=None, max_attempts: int = 4) 
                 response_format={
                     "type": "text",
                     "mime_type": "application/json",
-                    "schema": Invoice.model_json_schema(),
+                    "schema": schema,
                 },
                 store=False,
             ),
