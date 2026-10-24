@@ -1,10 +1,10 @@
 [project]
 name = "ai-lab"
 version = "0.1.0"
-description = "Add your description here"
+description = "Personal lab for learning LLMs, APIs, RAG and AI agents, with measured experiments"
 readme = "README.md"
 authors = [
-    { name = "Matteo Magliano", email = "perfiu02@gmail.com" }
+    { name = "Matteo Magliano", email = "matteomagliano02@gmail.com" }
 ]
 requires-python = ">=3.12"
 dependencies = [
