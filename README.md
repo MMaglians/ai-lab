@@ -18,9 +18,9 @@ Stesso prompt ("Spiega in tre frasi a un cliente non tecnico cos'è un modello l
 
 | Modello | Dove gira | Secondi | Token in | Token out | Costo per richiesta |
 |---|---|---|---|---|---|
-| Qwen3-0.6B | Colab (T4) | [10.41] | 35 | [70] | nessuna licenza (si paga la GPU) |
-| Qwen3-1.7B | Colab (T4) | [14.40] | 35 | [71] | nessuna licenza (si paga la GPU) |
-| gemini-3.5-flash-lite | API | [2.02] | 20 | [93] | circa $[0.00024] |
+| Qwen3-0.6B | Colab (T4) | 10.51 | 35 | 70 | nessuna licenza (si paga la GPU) |
+| Qwen3-1.7B | Colab (T4) | 14.40 | 35 | 71 | nessuna licenza (si paga la GPU) |
+| gemini-3.5-flash-lite | API | 2.02 | 20 | 93 | circa $0.00024 |
 
 Prezzi Gemini: $0,30 input e $2,50 output per milione di token (listino ufficiale, 8 ottobre 2026; con il tier gratuito la spesa effettiva è zero).
 
@@ -41,7 +41,13 @@ Confronto su un solo prompt, con valutazione soggettiva e tempi variabili tra es
 Gli script locali (`api_demo.py`, `gemini_demo.py`) usano un file `.env` con la chiave: copia `.env.example` in `.env` e compilalo. Il file `.env` non viene mai caricato su Git.
 
 ## Struttura
-Controlla con `dir` e scrivi solo cartelle e file che esistono davvero (`notebooks/`, `docs/`, `src/ai_lab/`, gli script, i test).
+- `notebooks/`: notebook della settimana 1 (`01_llm_sotto_il_cofano.ipynb`).
+- `docs/`: note in linguaggio non tecnico (`llm_per_non_tecnici.md`).
+- `data/`: test set sintetici di fatture (`testset.jsonl`, `testset_hard.jsonl`) ed esempi in `data/examples/`.
+- Settimana 0: `api_demo.py`, `gemini_demo.py`, `gemini_demo_locale.py`.
+- Settimana 2: `llm_client.py`, `sdk_demo.py`, `stream_demo.py`, `fewshot_demo.py`, `structured_demo.py`, `app.py`, `chat_client.py`, `schemas.py`, `extractor.py`, `extract_cli.py`, `make_testset.py`, `make_hard_testset.py`, `metrics.py`, `eval_extractor.py`, `fakes.py`.
+- Settimana 3: `vector_math.py`, `embed_texts.py`, `chunking.py`, `retrieval_metrics.py`, `toy_corpus.py`, `search_demo.py`, `faiss_demo.py`, `hnsw_demo.py`.
+- `test_*.py`: test unitari, eseguibili con `uv run pytest`; nessuno chiama la rete.
 
 ## Licenza
 MIT
