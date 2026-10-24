@@ -57,6 +57,38 @@ uv run python extract_cli.py data/examples/case_00.txt
 - "Rispondi in JSON" non basta: servono uno schema, la validazione e controlli di coerenza sui numeri.
 - Un errore di rete e un errore del modello vanno tenuti separati, anche nella valutazione.
 
+## Settimana 3: embedding e ricerca
+
+Ricerca per significato scritta a mano, poi con FAISS, e confronto tra ricerca esatta e approssimata. Il progetto completo (RAG sull'EU AI Act con citazioni e valutazione) è nel repository [AI-act-QA](https://github.com/MMaglians/AI-act-QA).
+
+**Cosa contiene**
+- Similarità coseno e ricerca top-k in NumPy (`vector_math.py`).
+- Embedding con Gemini, formati diversi per documenti e domande, cache su disco (`embed_texts.py`).
+- Chunking a parole con sovrapposizione (`chunking.py`) e metriche hit@k e recall@k (`retrieval_metrics.py`).
+- Ricerca semantica su un mini corpus originale di 12 testi (pallavolo, chitarra, giapponese) con 12 domande (`toy_corpus.py`, `search_demo.py`).
+- FAISS esatto confrontato con la ricerca in NumPy (`faiss_demo.py`).
+- HNSW contro ricerca esatta su 50.000 vettori sintetici (`hnsw_demo.py`).
+
+### Risultati
+- Mini corpus, 12 domande: hit@1 = 1.0, hit@3 = 1.0.
+- FAISS `IndexFlatIP` restituisce gli stessi risultati della ricerca in NumPy.
+- HNSW (M = 32, efConstruction = 100), 200 query, k = 10; ricerca esatta 0.29 ms per query:
+
+| efSearch | recall@10 | ms per query |
+|---|---|---|
+| 8 | 0.223 | 0.01 |
+| 16 | 0.297 | 0.02 |
+| 64 | 0.604 | 0.05 |
+| 256 | 0.872 | 0.11 |
+
+**Cosa ho imparato**
+- Con vettori normalizzati il prodotto scalare è il coseno: si normalizza una volta e si usa un indice a prodotto scalare.
+- HNSW scambia un po' di recall con la velocità; `efSearch` regola il compromesso. Con poche migliaia di vettori la ricerca esatta basta.
+
+### Limiti
+Mini corpus di 12 testi scritti da me e 12 domande: un test didattico, non un benchmark. I tempi dipendono dalla macchina.
+
+
 ## Come riprodurre
 1. Apri il notebook su Colab con il pulsante sopra e scegli **Runtime → Change runtime type → T4 GPU**.
 2. Per le parti con Gemini, crea un secret `GEMINI_API_KEY` (icona a chiave) e attiva **Notebook access**.
