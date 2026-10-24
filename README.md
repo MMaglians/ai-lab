@@ -33,6 +33,30 @@ Prezzi Gemini: $0,30 input e $2,50 output per milione di token (listino ufficial
 ### Limiti
 Confronto su un solo prompt, con valutazione soggettiva e tempi variabili tra esecuzioni: è un assaggio, non un benchmark. Il conteggio dei token di Qwen è solo una stima di quello di Gemini (tokenizer diversi).
 
+## Settimana 2: API, prompt e output strutturati
+
+Dalla prima chiamata con l'SDK di Gemini a un estrattore di fatture con output validato. Il progetto completo, con valutazione e README in inglese, è nel repository [invoice-extractor](https://github.com/MMaglians/invoice-extractor).
+
+**Cosa contiene**
+- Client condiviso con retry e backoff esponenziale su 429, 500 e 503 (`llm_client.py`).
+- Streaming con misura del tempo al primo token (`stream_demo.py`).
+- Zero-shot contro few-shot su una classificazione a etichette fisse (`fewshot_demo.py`).
+- Primo output strutturato validato con Pydantic (`structured_demo.py`).
+- Servizio FastAPI con `/health` e `/chat` in streaming SSE, più un client che misura il TTFT (`app.py`, `chat_client.py`).
+- Estrattore di fatture, test set sintetici e valutazione (`extractor.py`, `make_hard_testset.py`, `eval_extractor.py`).
+
+**Come provarlo**
+```
+uv run fastapi dev app.py
+uv run python chat_client.py "Cos'e' un tokenizer?"
+uv run python extract_cli.py data/examples/case_00.txt
+```
+
+**Cosa ho imparato**
+- Una chiamata a un LLM è una chiamata di rete: si ritenta solo sugli errori transitori, con attese crescenti e casuali.
+- "Rispondi in JSON" non basta: servono uno schema, la validazione e controlli di coerenza sui numeri.
+- Un errore di rete e un errore del modello vanno tenuti separati, anche nella valutazione.
+
 ## Come riprodurre
 1. Apri il notebook su Colab con il pulsante sopra e scegli **Runtime → Change runtime type → T4 GPU**.
 2. Per le parti con Gemini, crea un secret `GEMINI_API_KEY` (icona a chiave) e attiva **Notebook access**.

@@ -21,7 +21,7 @@ def fake_vat(rng: random.Random) -> str:
     return "IT" + "".join(str(rng.randint(0, 9)) for _ in range(11))
 
 def fake_iban(rng: random.Random) -> str:
-    "IT" + str(rng.randint(10, 99)) + "X" + "".join(str(rng.randint(0, 9)) for _ in range(22))
+    return "IT" + str(rng.randint(10, 99)) + "X" + "".join(str(rng.randint(0, 9)) for _ in range(22))
 
 def add_noise(case: dict, rng: random.Random) -> dict:
     lines = case["text"].split("\n")
