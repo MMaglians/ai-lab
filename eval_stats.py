@@ -80,3 +80,22 @@ def cohen_kappa(r1, r2) -> float:
     if p_e == 1.0:
         return float("nan")    # entrambi usano una sola etichetta: kappa non e' definito
     return (p_o - p_e) / (1 - p_e)
+
+
+
+def bootstrap_kappa(r1, r2, n_boot: int = 10_000, level: float = 0.95,
+                    seed: int = 0) -> tuple[float, float, float, float]:
+    """Kappa con IC bootstrap, ricampionando le VOCI (coppie di etichette).
+
+    Restituisce (kappa, basso, alto, quota di ricampionamenti in cui kappa non e' definito).
+    Se la quota e' alta, l'intervallo e' poco affidabile: ci sono troppo pochi casi negativi.
+    """
+    r1, r2 = list(r1), list(r2)
+    n = len(r1)
+    rng = np.random.default_rng(seed)
+    values = np.array([cohen_kappa([r1[i] for i in row], [r2[i] for i in row])
+                       for row in rng.integers(0, n, size=(n_boot, n))])
+    undefined = float(np.isnan(values).mean())
+    alpha = (1 - level) / 2
+    low, high = np.nanquantile(values, [alpha, 1 - alpha])
+    return cohen_kappa(r1, r2), float(low), float(high), undefined

@@ -2,9 +2,8 @@ import math
 
 import pytest
 
-from eval_stats import (bootstrap_ci, cohen_kappa, mcnemar_exact,
+from eval_stats import (bootstrap_ci, bootstrap_kappa, cohen_kappa, mcnemar_exact,
                         paired_bootstrap_diff, paired_counts, proportion_summary)
-
 
 def test_bootstrap_contiene_la_stima_ed_e_riproducibile():
     x = [True] * 15 + [False] * 5
@@ -58,3 +57,18 @@ def test_kappa_accordo_perfetto_e_casuale():
     assert cohen_kappa([1, 0, 1, 0], [1, 0, 1, 0]) == 1.0
     assert cohen_kappa([1, 1, 0, 0], [1, 0, 1, 0]) == 0.0
     assert math.isnan(cohen_kappa([1, 1, 1], [1, 1, 1]))
+    
+
+
+def test_bootstrap_kappa_contiene_la_stima():
+    r1 = ["si"] * 25 + ["no"] * 25
+    r2 = ["si"] * 20 + ["no"] * 5 + ["si"] * 10 + ["no"] * 15
+    k, low, high, undefined = bootstrap_kappa(r1, r2, n_boot=2_000)
+    assert k == pytest.approx(0.40) and low < k < high and undefined == 0.0
+
+
+def test_bootstrap_kappa_segnala_i_casi_non_definiti():
+    # 1 solo negativo su 10: molti ricampionamenti non lo contengono e kappa non e' definito
+    r = [True] * 9 + [False]
+    _, _, _, undefined = bootstrap_kappa(r, r, n_boot=2_000)
+    assert 0.2 < undefined < 0.5          # circa (9/10)^10 = 0,35
