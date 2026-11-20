@@ -88,6 +88,29 @@ Ricerca per significato scritta a mano, poi con FAISS, e confronto tra ricerca e
 ### Limiti
 Mini corpus di 12 testi scritti da me e 12 domande: un test didattico, non un benchmark. I tempi dipendono dalla macchina.
 
+## Settimana 7: valutazione con incertezza
+
+Strumenti statistici riusabili per i report di valutazione dei progetti, applicati a [nihongo-agent](https://github.com/MMaglians/nihongo-agent) e [nl-sql-agent](https://github.com/MMaglians/nl-sql-agent).
+
+**Cosa contiene**
+- `eval_stats.py`: intervalli bootstrap; tabella appaiata e test di McNemar esatto tra due configurazioni; differenza appaiata con IC; kappa di Cohen con IC bootstrap e quota di ricampionamenti in cui non è definita. Wilson e test dei segni vengono da `metrics.py`.
+- `notebooks/eval_report.ipynb`: legge i file di risultati dei progetti così come sono, senza copiarli.
+
+### Risultati
+| Confronto | Risultato |
+|---|---|
+| nl-sql-agent, prompt v1 contro v0 (25 domande) | astensione da 0/5 a 4/5, query corrette 20/20 in entrambe; McNemar esatto p = 0,125 |
+| nihongo-agent v1 contro v0 (20 domande comuni, scelta del tool) | 1 migliorata, 0 peggiorate, p = 1,0 |
+| Giudice LLM contro le mie etichette (48 risposte) | accordo 47/48, kappa 0,85 con IC 95% 0,00–1,00 |
+
+### Cosa ho imparato
+- Con una proporzione al bordo (20/20) il bootstrap percentile collassa a [1, 1]: per le proporzioni uso Wilson, il bootstrap per mediane, medie e differenze.
+- Con poche coppie discordanti anche il bootstrap della differenza è troppo ottimista: su nl-sql escludeva lo zero, mentre McNemar esatto dava p = 0,125.
+- Una kappa alta con 3 soli negativi non dimostra nulla: l'intervallo copre tutto.
+
+### Limiti
+- Campioni piccoli (20–48 voci) e un solo valutatore umano.
+
 
 ## Come riprodurre
 1. Apri il notebook su Colab con il pulsante sopra e scegli **Runtime → Change runtime type → T4 GPU**.
@@ -97,12 +120,13 @@ Mini corpus di 12 testi scritti da me e 12 domande: un test didattico, non un be
 Gli script locali (`api_demo.py`, `gemini_demo.py`) usano un file `.env` con la chiave: copia `.env.example` in `.env` e compilalo. Il file `.env` non viene mai caricato su Git.
 
 ## Struttura
-- `notebooks/`: notebook della settimana 1 (`01_llm_sotto_il_cofano.ipynb`).
+- `notebooks/`: notebook della settimana 1 (`01_llm_sotto_il_cofano.ipynb`) e report di valutazione della settimana 7 (`eval_report.ipynb`).
 - `docs/`: note in linguaggio non tecnico (`llm_per_non_tecnici.md`).
 - `data/`: test set sintetici di fatture (`testset.jsonl`, `testset_hard.jsonl`) ed esempi in `data/examples/`.
 - Settimana 0: `api_demo.py`, `gemini_demo.py`, `gemini_demo_locale.py`.
 - Settimana 2: `llm_client.py`, `sdk_demo.py`, `stream_demo.py`, `fewshot_demo.py`, `structured_demo.py`, `app.py`, `chat_client.py`, `schemas.py`, `extractor.py`, `extract_cli.py`, `make_testset.py`, `make_hard_testset.py`, `metrics.py`, `eval_extractor.py`, `fakes.py`.
 - Settimana 3: `vector_math.py`, `embed_texts.py`, `chunking.py`, `retrieval_metrics.py`, `toy_corpus.py`, `search_demo.py`, `faiss_demo.py`, `hnsw_demo.py`.
+- Settimana 7: `eval_stats.py`.
 - `test_*.py`: test unitari, eseguibili con `uv run pytest`; nessuno chiama la rete.
 
 ## Licenza
