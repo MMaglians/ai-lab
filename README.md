@@ -113,11 +113,28 @@ Strumenti statistici riusabili per i report di valutazione dei progetti, applica
 
 
 ## Come riprodurre
+### Settimana 1: Notebook su Colab
 1. Apri il notebook su Colab con il pulsante sopra e scegli **Runtime → Change runtime type → T4 GPU**.
 2. Per le parti con Gemini, crea un secret `GEMINI_API_KEY` (icona a chiave) e attiva **Notebook access**.
 3. **Runtime → Run all**.
 
 Gli script locali (`api_demo.py`, `gemini_demo.py`) usano un file `.env` con la chiave: copia `.env.example` in `.env` e compilalo. Il file `.env` non viene mai caricato su Git.
+
+### Settimana 7: report di valutazione, in locale
+`notebooks/eval_report.ipynb` non gira su Colab: legge i file di risultati di [nl-sql-agent](https://github.com/MMaglians/nl-sql-agent) e [nihongo-agent](https://github.com/MMaglians/nihongo-agent) direttamente dai loro repository, che devono stare nella stessa cartella di `ai-lab`:
+
+```text
+cartella/
+├── ai-lab/
+├── nl-sql-agent/
+└── nihongo-agent/
+```
+
+1. Dalla cartella che contiene `ai-lab`: `git clone https://github.com/MMaglians/nl-sql-agent` e `git clone https://github.com/MMaglians/nihongo-agent`.
+2. In `ai-lab`: `uv sync`.
+3. Apri il notebook in VS Code, scegli il kernel `.venv` di `ai-lab` ed esegui tutte le celle. Non serve nessuna chiave API.
+
+La prima cella deve stampare `True True`; se stampa `False`, uno dei due repository non è nella posizione giusta.
 
 ## Struttura
 - `notebooks/`: notebook della settimana 1 (`01_llm_sotto_il_cofano.ipynb`) e report di valutazione della settimana 7 (`eval_report.ipynb`).
